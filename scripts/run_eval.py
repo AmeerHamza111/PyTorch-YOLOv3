@@ -29,7 +29,7 @@ def main(data_config, model_def, weights_path, batch_size,
 
     print("Compute mAP...")
 
-    precision, recall, AP, f1, ap_class = evaluate_model(
+    precision, recall, avg_prec, f1, ap_class = evaluate_model(
         model,
         path_data=valid_path,
         iou_thres=iou_thres,
@@ -41,10 +41,11 @@ def main(data_config, model_def, weights_path, batch_size,
     )
 
     print("Average Precisions:")
+    _cls_name = lambda c: class_names[c] if c < len(class_names) else 'unknown'
     for i, c in enumerate(ap_class):
-        print(f"+ Class '{c}' ({class_names[c]}) - AP: {AP[i]}")
+        print(f"+ Class '{c}' ({_cls_name(c)}) - AP: {avg_prec[i]}")
 
-    print(f"mAP: {AP.mean()}")
+    print(f"mAP: {avg_prec.mean()}\nmF1: {f1.mean()}")
 
 
 if __name__ == "__main__":
